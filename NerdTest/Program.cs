@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using NerdFactory.NerdHelpers;
+using NerdFactory;
+using NerdFactory.Helpers;
 using NerdTest.Dto;
 namespace NerdTest;
 

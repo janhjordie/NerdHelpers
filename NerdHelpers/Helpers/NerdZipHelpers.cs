@@ -1,7 +1,7 @@
 using ICSharpCode.SharpZipLib.Zip;
-namespace NerdFactory.NerdHelpers;
+namespace NerdFactory.Helpers;
 
-public abstract class NerdZipHelpers
+public static class NerdZipHelpers
 {
 	public static void Zip(MemoryStream input, MemoryStream output, String? zipKey)
 	{

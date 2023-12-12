@@ -1,11 +1,10 @@
 using CsvHelper;
 using CsvHelper.Configuration;
 using System.Globalization;
-namespace NerdFactory.NerdHelpers;
+namespace NerdFactory.Helpers;
 
-public class NerdCsvHelpers
+public abstract class NerdCsvHelpers
 {
-
 	private const String DataFolder = "Data";
 
 	public static IEnumerable<T> LoadCsvMemoryStream<T>(MemoryStream? csvStream, String delimiter = ";")

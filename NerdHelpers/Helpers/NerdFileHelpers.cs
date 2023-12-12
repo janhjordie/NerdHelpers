@@ -1,7 +1,7 @@
 using System.Text;
-namespace NerdFactory.NerdHelpers;
+namespace NerdFactory.Helpers;
 
-public class NerdFileHelpers
+public abstract class NerdFileHelpers
 {
 	private const String DataFolder = "Data";
 

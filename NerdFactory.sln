@@ -6,7 +6,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NerdTest", "NerdTest\NerdTe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NerdHelpers", "NerdHelpers\NerdHelpers.csproj", "{F0ECF71A-2654-4B66-8F6A-D739EEA394AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NerdBlob", "NerdBlob\NerdBlob.csproj", "{2C2126FF-087E-4F77-98D1-85EBA1BD5A1A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NerdBlobServices", "NerdBlobServices\NerdBlobServices.csproj", "{2C2126FF-087E-4F77-98D1-85EBA1BD5A1A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

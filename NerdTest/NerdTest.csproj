@@ -20,6 +20,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\NerdBlobServices\NerdBlobServices.csproj" />
         <ProjectReference Include="..\NerdHelpers\NerdHelpers.csproj"/>
     </ItemGroup>
 

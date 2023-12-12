@@ -44,9 +44,8 @@ public abstract class NerdCsvHelpers
 	{
 		if (string.IsNullOrWhiteSpace(csvString)) return new List<T>();
 
-		var stream = NerdStreamByteHelpers.StringToMemoryStream(csvString);
+		using var stream = NerdStreamByteHelpers.StringToMemoryStream(csvString);
 		var records = LoadCsvMemoryStream<T>(NerdStreamByteHelpers.StringToMemoryStream(csvString), delimiter);
-		stream.Dispose();
 
 		return records;
 	}
@@ -56,13 +55,28 @@ public abstract class NerdCsvHelpers
 		if (string.IsNullOrWhiteSpace(csvfile)) return new List<T>();
 
 		using var reader = new StreamReader(csvfile);
-		using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+		using var csv = new CsvReader(reader, new CsvConfiguration(cultureInfo: CultureInfo.InvariantCulture)
 		{
-			var records = csv.GetRecords<T>();
+			Delimiter = delimiter
+		});
 
-			return records;
-		}
+		var records = csv.GetRecords<T>();
+
+		return records;
+
 	}
+
+	public static IEnumerable<T> LoadCompressedCsvFile<T>(String csvfile, String compressionKey, String delimiter = ";")
+	{
+		if (string.IsNullOrWhiteSpace(csvfile)) return new List<T>();
+
+		var bytes = NerdFileHelpers.ReadFileToByteArray(csvfile);
+		var decompressed = NerdZipHelpers.Unzip(bytes, compressionKey);
+		var records = LoadCsvBytes<T>(decompressed, delimiter);
+
+		return records;
+	}
+
 
 	public static void ToCsvFile<T>(IEnumerable<T> contacts, String csvFileName)
 	{
@@ -75,14 +89,18 @@ public abstract class NerdCsvHelpers
 		};
 
 		using var writer = new StreamWriter(fileWithPath);
-
 		using var csv = new CsvWriter(writer, config);
 		csv.WriteRecords(contacts);
 		csv.Flush();
 		writer.Flush();
+	}
 
 
-
+	public static void ToCompressedCsvFile<T>(IEnumerable<T> contacts, String csvFileName, String compressionKey)
+	{
+		var bytes = ToCsvByteArray(contacts);
+		var compressed = NerdZipHelpers.Zip(bytes, compressionKey);
+		if (compressed != null) NerdFileHelpers.SaveByteArrayToFile(compressed, csvFileName);
 	}
 
 

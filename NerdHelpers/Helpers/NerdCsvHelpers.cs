@@ -33,7 +33,7 @@ public abstract class NerdCsvHelpers
 	{
 		if (csvBytes == null) return [];
 
-		var stream = NerdConvertHelper.ByteArrayToMemoryStream(csvBytes);
+		var stream = NerdStreamByteHelpers.ByteArrayToMemoryStream(csvBytes);
 		var records = LoadCsvMemoryStream<T>(stream, delimiter);
 		stream.Dispose();
 
@@ -44,8 +44,8 @@ public abstract class NerdCsvHelpers
 	{
 		if (string.IsNullOrWhiteSpace(csvString)) return new List<T>();
 
-		var stream = NerdConvertHelper.StringToMemoryStream(csvString);
-		var records = LoadCsvMemoryStream<T>(NerdConvertHelper.StringToMemoryStream(csvString), delimiter);
+		var stream = NerdStreamByteHelpers.StringToMemoryStream(csvString);
+		var records = LoadCsvMemoryStream<T>(NerdStreamByteHelpers.StringToMemoryStream(csvString), delimiter);
 		stream.Dispose();
 
 		return records;
@@ -130,7 +130,7 @@ public abstract class NerdCsvHelpers
 	{
 		var stream = ToCsvStream(contacts);
 		stream.Position = 0;
-		var bytes = NerdConvertHelper.MemoryStreamToByteArray(stream);
+		var bytes = NerdStreamByteHelpers.MemoryStreamToByteArray(stream);
 		stream.Dispose();
 
 		return bytes;

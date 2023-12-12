@@ -7,14 +7,17 @@
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <Title>NerdHelpers</Title>
         <Authors>Jan Hjørdie, NerdFactory</Authors>
-        <Version>1.0.6</Version>
+        <Version>1.0.9</Version>
         <Copyright>Jan Hjørdie</Copyright>
         <PackageProjectUrl>https://github.com/janhjordie/NerdHelpers</PackageProjectUrl>
         <RepositoryUrl>https://github.com/janhjordie/NerdHelpers</RepositoryUrl>
         <TargetFramework>net8.0</TargetFramework>
         <LangVersion>preview</LangVersion>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
-
+    <ItemGroup>
+        <None Include="README.md" Pack="true" PackagePath="\"/>
+    </ItemGroup>
     <ItemGroup>
         <PackageReference Include="CsvHelper" Version="30.0.1"/>
         <PackageReference Include="SharpZipLib" Version="1.4.2"/>

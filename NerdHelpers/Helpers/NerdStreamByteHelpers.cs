@@ -1,7 +1,7 @@
 using System.Text;
 namespace NerdFactory.Helpers;
 
-public abstract class NerdConvertHelper
+public abstract class NerdStreamByteHelpers
 {
 
 	public static Stream StringToStream(String input)

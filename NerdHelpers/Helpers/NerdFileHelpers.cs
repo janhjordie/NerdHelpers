@@ -43,6 +43,7 @@ public abstract class NerdFileHelpers
 
 	public static void SaveMemoryStreamToFile(MemoryStream memoryStream, String filePath)
 	{
+		Directory.CreateDirectory(DataFolder);
 		var fileWithPath = Path.Combine(DataFolder, filePath);
 
 		using var fileStream = new FileStream(fileWithPath, FileMode.Create, FileAccess.Write);
@@ -51,6 +52,7 @@ public abstract class NerdFileHelpers
 
 	public static void SaveByteArrayToFile(Byte[] byteArray, String filePath)
 	{
+		Directory.CreateDirectory(DataFolder);
 		var fileWithPath = Path.Combine(DataFolder, filePath);
 
 		File.WriteAllBytes(fileWithPath, byteArray);
@@ -58,6 +60,7 @@ public abstract class NerdFileHelpers
 
 	public static void SaveStringToFile(String content, String filePath, Encoding? encoding = null)
 	{
+		Directory.CreateDirectory(DataFolder);
 		var fileWithPath = Path.Combine(DataFolder, filePath);
 
 		encoding = encoding ?? Encoding.UTF8;

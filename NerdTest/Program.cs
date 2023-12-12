@@ -1,8 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using NerdConvert;
-using NerdConvert.NerdHelpers;
-using NerdConvert.Services;
+using NerdFactory.NerdHelpers;
 using NerdTest.Dto;
 namespace NerdTest;
 
@@ -18,11 +16,10 @@ internal class Program
 
 		var zipKey = configuration["zipKey"] ?? "12345";
 
-		var serviceProvider = new ServiceCollection()
-			.AddNerdConvertServices()
-			.BuildServiceProvider();
+		var serviceProvider = new ServiceCollection().BuildServiceProvider();
 
-		var nerdCsvService = serviceProvider.GetService<NerdCsvService>();
+
+		//	var nerdCsvService = serviceProvider.GetService<NerdCsvService>();
 
 		var csvFileBytes = NerdFileHelpers.ReadFileToByteArray("crm-welcome.csv");
 		if (csvFileBytes != null)

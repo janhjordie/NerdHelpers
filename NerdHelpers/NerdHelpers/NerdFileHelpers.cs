@@ -1,5 +1,5 @@
 using System.Text;
-namespace NerdConvert.NerdHelpers;
+namespace NerdFactory.NerdHelpers;
 
 public class NerdFileHelpers
 {
@@ -28,7 +28,7 @@ public class NerdFileHelpers
 		return File.ReadAllBytes(fileWithPath);
 	}
 
-	public static String? ReadFileToString(String filePath, Encoding encoding = null)
+	public static String? ReadFileToString(String filePath, Encoding? encoding = null)
 	{
 		var fileWithPath = Path.Combine(DataFolder, filePath);
 
@@ -56,7 +56,7 @@ public class NerdFileHelpers
 		File.WriteAllBytes(fileWithPath, byteArray);
 	}
 
-	public static void SaveStringToFile(String content, String filePath, Encoding encoding = null)
+	public static void SaveStringToFile(String content, String filePath, Encoding? encoding = null)
 	{
 		var fileWithPath = Path.Combine(DataFolder, filePath);
 

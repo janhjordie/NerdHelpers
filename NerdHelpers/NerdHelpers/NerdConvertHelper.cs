@@ -1,5 +1,5 @@
 using System.Text;
-namespace NerdConvert.NerdHelpers;
+namespace NerdFactory.NerdHelpers;
 
 public abstract class NerdConvertHelper
 {

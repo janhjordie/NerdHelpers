@@ -1,7 +1,7 @@
 using CsvHelper;
 using CsvHelper.Configuration;
 using System.Globalization;
-namespace NerdConvert.NerdHelpers;
+namespace NerdFactory.NerdHelpers;
 
 public class NerdCsvHelpers
 {
@@ -41,7 +41,7 @@ public class NerdCsvHelpers
 		return records;
 	}
 
-	public IEnumerable<T> LoadCsvString<T>(String csvString, String delimiter = ";")
+	public static IEnumerable<T> LoadCsvString<T>(String csvString, String delimiter = ";")
 	{
 		if (string.IsNullOrWhiteSpace(csvString)) return new List<T>();
 
@@ -52,8 +52,20 @@ public class NerdCsvHelpers
 		return records;
 	}
 
+	public static IEnumerable<T> LoadCsvFile<T>(String csvfile, String delimiter = ";")
+	{
+		if (string.IsNullOrWhiteSpace(csvfile)) return new List<T>();
 
-	public static void Save<T>(IEnumerable<T> contacts, String csvFileName)
+		using var reader = new StreamReader(csvfile);
+		using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+		{
+			var records = csv.GetRecords<T>();
+
+			return records;
+		}
+	}
+
+	public static void ToCsvFile<T>(IEnumerable<T> contacts, String csvFileName)
 	{
 		var fileWithPath = Path.Combine(DataFolder, csvFileName);
 
@@ -90,7 +102,7 @@ public class NerdCsvHelpers
 
 	}
 
-	public static MemoryStream CsvIEnumerableToStream<T>(IEnumerable<T> contacts)
+	public static MemoryStream ToCsvStream<T>(IEnumerable<T> contacts)
 	{
 		var str = new MemoryStream();
 		var config = new CsvConfiguration(CultureInfo.InvariantCulture)
@@ -115,9 +127,9 @@ public class NerdCsvHelpers
 		return str;
 	}
 
-	public static Byte[] ToByteArray<T>(IEnumerable<T> contacts)
+	public static Byte[] ToCsvByteArray<T>(IEnumerable<T> contacts)
 	{
-		var stream = CsvIEnumerableToStream(contacts);
+		var stream = ToCsvStream(contacts);
 		stream.Position = 0;
 		var bytes = NerdConvertHelper.MemoryStreamToByteArray(stream);
 		stream.Dispose();

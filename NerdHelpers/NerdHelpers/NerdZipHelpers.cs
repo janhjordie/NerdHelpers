@@ -1,5 +1,5 @@
 using ICSharpCode.SharpZipLib.Zip;
-namespace NerdConvert.NerdHelpers;
+namespace NerdFactory.NerdHelpers;
 
 public abstract class NerdZipHelpers
 {

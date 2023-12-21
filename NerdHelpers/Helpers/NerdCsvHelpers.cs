@@ -44,15 +44,24 @@ public abstract class NerdCsvHelpers
 	{
 		if (string.IsNullOrWhiteSpace(csvString)) return new List<T>();
 
-		using var stream = NerdStreamByteHelpers.StringToMemoryStream(csvString);
-		var records = LoadCsvMemoryStream<T>(NerdStreamByteHelpers.StringToMemoryStream(csvString), delimiter);
+		var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+		{
+			Delimiter = delimiter
+		};
 
-		return records;
+		using var reader = new StringReader(csvString);
+		using var csv = new CsvReader(reader, config);
+		csv.Read();
+		csv.ReadHeader();
+
+		return csv
+			.GetRecords<T>()
+			.ToList();
 	}
 
 	public static IEnumerable<T> LoadCsvFile<T>(String csvfile, String delimiter = ";")
 	{
-		if (string.IsNullOrWhiteSpace(csvfile)) return new List<T>();
+		if (string.IsNullOrWhiteSpace(csvfile) || !File.Exists(csvfile)) return new List<T>();
 
 		using var reader = new StreamReader(csvfile);
 		using var csv = new CsvReader(reader, new CsvConfiguration(cultureInfo: CultureInfo.InvariantCulture)
@@ -68,7 +77,7 @@ public abstract class NerdCsvHelpers
 
 	public static IEnumerable<T> LoadCompressedCsvFile<T>(String csvfile, String compressionKey, String delimiter = ";")
 	{
-		if (string.IsNullOrWhiteSpace(csvfile)) return new List<T>();
+		if (string.IsNullOrWhiteSpace(csvfile) || !File.Exists(Path.Combine(DataFolder, csvfile))) return new List<T>();
 
 		var bytes = NerdFileHelpers.ReadFileToByteArray(csvfile);
 		var decompressed = NerdZipHelpers.Unzip(bytes, compressionKey);

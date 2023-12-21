@@ -19,6 +19,17 @@ public abstract class NerdFileHelpers
 
 	}
 
+
+	public static FileInfo? ReadFileInfo(String filePath)
+	{
+		var fileWithPath = Path.Combine(DataFolder, filePath);
+
+		if (!File.Exists(fileWithPath)) return null;
+
+		return new FileInfo(fileWithPath);
+	}
+
+
 	public static Byte[]? ReadFileToByteArray(String filePath)
 	{
 		var fileWithPath = Path.Combine(DataFolder, filePath);
@@ -48,6 +59,7 @@ public abstract class NerdFileHelpers
 
 		using var fileStream = new FileStream(fileWithPath, FileMode.Create, FileAccess.Write);
 		memoryStream.WriteTo(fileStream);
+		fileStream.Flush();
 	}
 
 	public static void SaveByteArrayToFile(Byte[] byteArray, String filePath)

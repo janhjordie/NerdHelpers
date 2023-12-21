@@ -1,7 +1,8 @@
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using NerdFactory.Helpers;
+using NerdFactory.Options;
 namespace NerdFactory.Services;
 
 public class NerdAzureBlobService
@@ -9,16 +10,11 @@ public class NerdAzureBlobService
 	private readonly BlobContainerClient _blobContainer;
 	private readonly BlobServiceClient _blobServiceClient;
 
-	public NerdAzureBlobService(IConfiguration configuration)
+	public NerdAzureBlobService(IOptions<NerdAzureBlobOptions> options)
 	{
-		if (string.IsNullOrWhiteSpace(configuration["AzureBlobStorage"]))
-			throw new Exception("AzureBlobStorage setting is missing");
-
-		var connectionString = configuration["AzureBlobStorage"];
-		var containerName = configuration["AzureBlobStorageContainerName"] ?? "blobs";
-
-		_blobServiceClient = new BlobServiceClient(connectionString);
-		_blobContainer = CreateOrGetBlobContainer(containerName);
+		var config = options.Value;
+		_blobServiceClient = new BlobServiceClient(config.ConnectionString);
+		_blobContainer = CreateOrGetBlobContainer(config.ContainerName);
 	}
 
 	private BlobContainerClient CreateOrGetBlobContainer(String container)
@@ -40,6 +36,7 @@ public class NerdAzureBlobService
 	public async Task UploadAsync(Byte[] data, String destinationPath)
 	{
 		var blobClient = _blobContainer.GetBlobClient(destinationPath);
+		await blobClient.DeleteIfExistsAsync();
 		using var stream = new MemoryStream(data);
 		await blobClient.UploadAsync(stream, true);
 	}
@@ -48,10 +45,18 @@ public class NerdAzureBlobService
 	{
 		var blobContainer = CreateOrGetBlobContainer(container);
 		var blobClient = blobContainer.GetBlobClient(destinationPath);
+		await blobClient.DeleteIfExistsAsync();
 		using var stream = new MemoryStream(data);
 		await blobClient.UploadAsync(stream, true);
 	}
 
+	public async Task DeleteAsync(String container, String destinationPath)
+	{
+		var blobContainer = CreateOrGetBlobContainer(container);
+		var blobClient = blobContainer.GetBlobClient(destinationPath);
+		await blobClient.DeleteIfExistsAsync();
+
+	}
 
 	public async Task CompressAndUploadAsync(Byte[] data, String destinationPath, String key)
 	{
@@ -65,7 +70,6 @@ public class NerdAzureBlobService
 		if (compressed != null) await UploadAsync(compressed, container.ToLower(), destinationPath);
 	}
 
-
 	public async Task<Byte[]> DownloadAsync(String sourcePath)
 	{
 		var blobClient = _blobContainer.GetBlobClient(sourcePath);
@@ -75,7 +79,6 @@ public class NerdAzureBlobService
 		await response.Value.Content.CopyToAsync(stream);
 
 		return stream.ToArray();
-
 	}
 
 	public async Task<Byte[]> DownloadAndDecompressAsync(String sourcePath, String key)

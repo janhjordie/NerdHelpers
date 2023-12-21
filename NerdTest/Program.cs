@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using NerdFactory;
 using NerdFactory.Extensions;
 using NerdFactory.Helpers;
 using NerdFactory.Services;
@@ -9,7 +8,7 @@ namespace NerdTest;
 
 internal class Program
 {
-	private async static Task Main(String[] args)
+	private static async Task Main(String[] args)
 	{
 
 		IConfiguration configuration = new ConfigurationBuilder()
@@ -17,20 +16,18 @@ internal class Program
 			.AddEnvironmentVariables()
 			.Build();
 
+
 		var serviceProvider = new ServiceCollection()
+			.AddNerdAzureBlobServices(configuration)
 			.BuildServiceProvider();
-		
-			var nerdAzureBlob = new NerdAzureBlobService(configuration);
-			var files = await nerdAzureBlob.FilesAsync("crmtool");
-		
+
+		var nerdAzureBlob = serviceProvider.GetRequiredService<NerdAzureBlobService>();
+		var files = await nerdAzureBlob.FilesAsync("crmtool");
+
 
 		void TestCsv()
 		{
 			var zipKey = configuration["zipKey"] ?? "12345";
-
-
-
-
 			var csvFileBytes = NerdFileHelpers.ReadFileToByteArray("crm-welcome.csv");
 			if (csvFileBytes != null)
 			{
@@ -47,7 +44,7 @@ internal class Program
 				var csvRecordsFromZip2 = NerdCsvHelpers.LoadCsvBytes<CrmCsvWelcomeContact>(unzippedCsvFileBytes);
 				NerdFileHelpers.SaveByteArrayToFile(unzippedCsvFileBytes, "crm-welcome-from-zip.csv");
 			}
-			
+
 		}
 
 	}
